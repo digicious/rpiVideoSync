@@ -42,7 +42,12 @@ io.sockets.on('connection', function (socket) {
 	
 });
 
-
+app.get('/getRspList',function(req,res){
+	response.writeHead(200, {"Content-Type": "application/json"});
+	var otherArray = [ { ip: "192.168.1.2", item2:  ["movie1.mp4","movie2.mp4"] },  { ip: "192.168.1.3", item2: ["movie4.mp4","movie5.mp4"] };];
+    response.write( JSON.stringify( rsp: otherArray  ) );
+  response.end();
+}
 
 app.get('/start', function(req,res){
 		io.sockets.emit('start');
