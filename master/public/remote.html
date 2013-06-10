@@ -12,22 +12,19 @@
 <div class="container-fluid">
       <form class="remote">
         <h2 class="remote-heading">Remote Control</h2>
-        <button class="btn btn-large btn-block btn-primary" type="button">Start</button>
-        <button class="btn btn-large btn-block btn-primary" type="button">Stop</button>
+        <button class="btn btn-large btn-block btn-primary" type="button" id="btnStart">Start</button>
+        <button class="btn btn-large btn-block btn-primary" type="button" id="btnStop">Stop</button>
         <button class="btn btn-large btn-block btn-primary" type="button">Shutdown</button>
       </form>
 	  <div class="remote">
 	  	 <ul data-bind="foreach: rsp">
         <li>
             <div>
-                <span data-bind="text: pid"> </span>
-                 <span data-bind="text: socketId"> </span>
+				 Raspberry id :
+                 <span data-bind="text: id"> </span>
+                 (<span data-bind="text: pid"></span>)
             </div>
-            <ul data-bind="foreach: movieList">
-                <li>
-                    <span data-bind="text: $data"> </span>
-                </li>
-            </ul>
+			<select data-bind="options: movieList, value: selectedMovie"></select>
         </li>
 		</ul>
 	  </div>
@@ -36,10 +33,32 @@
 	<script type='text/javascript' src='js/knockout-2.2.1.js'></script>
 	<script src="js/bootstrap.min.js"></script>
 	 <script>
+		var viewModel ;
 	 	$.getJSON('/getRspList.json', function(data) {
 		      // The view model is an abstract description of the state of the UI, but without any knowledge of the UI technology (HTML)
-			var viewModel = { rsp: data } ;
+			
+			viewModel = { rsp: data };
+			
 			ko.applyBindings(viewModel);
+			$("#btnStart").click(function(d){
+				
+				 $.ajax("/start", {
+					type: 'POST',
+					data: {jdata: JSON.stringify(viewModel.rsp)},
+					dataType: 'json'
+				});
+	
+	
+			});
+			$("#btnStop").click(function(d){
+				//alert(JSON.stringify(viewModel.rsp));
+			
+				 $.ajax("/stop", {
+					type: 'GET'					
+				});
+	
+	
+			});
 		});
  
 	

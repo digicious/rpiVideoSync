@@ -26,15 +26,15 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/remote.html');
 });
 
+
+
+
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
 
 var io = require('socket.io').listen(8082);
-
-
-
 
 rspArray = [];
 
@@ -47,7 +47,8 @@ io.sockets.on('connection', function (socket) {
 	socket.emit("getMovieList");
 	socket.on("onMovieListResponse",function(data)
 	{
-		data.socketId = socket.id ;
+		data.socketId = socket.id;
+		data.selectedMovie = "none";
 		rspArray.push(data);
 		console.log(rspArray);
 	});
@@ -74,13 +75,28 @@ app.get('/getRspList.json',function(req,res){
   res.end();
 });
 
-app.get('/start', function(req,res){
-		io.sockets.emit('start');
-		console.log('start');
-		exec("nohup ./omxplayer-sync -v -m -x 255.255.255.255 ../movie.mp4.mp4 > /dev/null &", puts);		
+app.post('/start', function(req,res){
+	
+		 console.log("--->"+ JSON.parse(req.body.jdata));
+	    io.sockets.clients().forEach(function (socket) 
+		 {
+					socket.emit('start', JSON.parse(req.body.jdata).filter(function(o){ return o.socketId == socket.id ;}));
+		 });
+		
+		
+		//exec("nohup ./omxplayer-sync -v -m -x 255.255.255.255 ../movie.mp4.mp4 > /dev/null &", puts);		
+		
+		
 	});
+app.get('/stop', function(req,res){
+	io.sockets.clients().forEach(function (socket) 
+	 {
+		socket.emit('stop');
+	 });
+	console.log('start'+ stop);
+});
 app.get('/halt', function(req,res){
-		io.sockets.emit('start');
-		console.log('start');
-		exec("sudo halt",puts);
+		io.sockets.emit('halt');
+		console.log('halt');
+		//exec("sudo halt",puts);
 	});
