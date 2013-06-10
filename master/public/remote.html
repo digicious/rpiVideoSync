@@ -16,18 +16,33 @@
         <button class="btn btn-large btn-block btn-primary" type="button">Stop</button>
         <button class="btn btn-large btn-block btn-primary" type="button">Shutdown</button>
       </form>
-	  <form class="remote">
-	  	<ul>
-	  		<li>1</li>
-	  		<li>2</li>
-	  		<li>3</li>
-	  	</ul>
-	  </form>
+	  <div class="remote">
+	  	 <ul data-bind="foreach: rsp">
+        <li>
+            <div>
+                <span data-bind="text: pid"> </span>
+                 <span data-bind="text: socketId"> </span>
+            </div>
+            <ul data-bind="foreach: movieList">
+                <li>
+                    <span data-bind="text: $data"> </span>
+                </li>
+            </ul>
+        </li>
+		</ul>
+	  </div>
     </div> 
 	<script src="js/jquery-2.0.1.min.js"></script>
+	<script type='text/javascript' src='js/knockout-2.2.1.js'></script>
 	<script src="js/bootstrap.min.js"></script>
 	 <script>
-		
+	 	$.getJSON('/getRspList.json', function(data) {
+		      // The view model is an abstract description of the state of the UI, but without any knowledge of the UI technology (HTML)
+			var viewModel = { rsp: data } ;
+			ko.applyBindings(viewModel);
+		});
+ 
+	
 	 </script>
   </body>
 </html>

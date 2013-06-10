@@ -20,6 +20,7 @@ function puts(error, stdout, stderr) { sys.puts(stdout); };
 console.log('Hello world');
 
 
+
 //Routes
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/remote.html');
@@ -33,21 +34,45 @@ server.listen(app.get('port'), function(){
 var io = require('socket.io').listen(8082);
 
 
+
+
+rspArray = [];
+
 io.sockets.on('connection', function (socket) {
   	socket.broadcast.emit('newPiConnected'); 
 	console.log('user connected');
 	socket.on('remoteConnected', function(){
 		socket.broadcast.emit('remoteConnected',payload);
 	});
+	socket.emit("getMovieList");
+	socket.on("onMovieListResponse",function(data)
+	{
+		data.socketId = socket.id ;
+		rspArray.push(data);
+		console.log(rspArray);
+	});
+	socket.on('disconnect', function () {
+	   console.log('Rsp disconnected!!!');
+	   rspArray = rspArray.filter(
+		function (value) {
+			return ( value.socketId != socket.id);
+			
+	   });
+	});
 	
 });
 
-app.get('/getRspList',function(req,res){
-	response.writeHead(200, {"Content-Type": "application/json"});
-	var otherArray = [ { ip: "192.168.1.2", item2:  ["movie1.mp4","movie2.mp4"] },  { ip: "192.168.1.3", item2: ["movie4.mp4","movie5.mp4"] };];
-    response.write( JSON.stringify( rsp: otherArray  ) );
-  response.end();
-}
+
+app.get('/getRspList.json',function(req,res){
+	res.writeHead(200, {"Content-Type": "application/json"});
+	/*var rspArray = [ 
+		{"rsp" : { id: "master", movies:["movie.mp4","movieOld.mp4"] }}, 
+		{"rsp" : { id: "192.168.1.2", movies:["movie1.mp4","movie2.mp4"] }}, 
+		{"rsp": { id: "192.168.1.3", movies:["movie54.mp4","movie6.mp4"] }} ];*/
+    res.write(
+     JSON.stringify( rspArray ));
+  res.end();
+});
 
 app.get('/start', function(req,res){
 		io.sockets.emit('start');
