@@ -77,7 +77,7 @@ app.post('/start', function(req,res){
 		 console.log("--->"+ JSON.parse(req.body.jdata));
 	    io.sockets.clients().forEach(function (socket) 
 		 {
-				socket.emit('start', JSON.parse(req.body.jdata).slave.filter(function(o){ return o.socketId == socket.id ;}));
+				socket.emit('start', JSON.parse(req.body.jdata).slaves.filter(function(o){ return o.socketId == socket.id ;}));
 		 });
 		
 		
