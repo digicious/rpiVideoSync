@@ -44,7 +44,6 @@
 		      // The view model is an abstract description of the state of the UI, but without any knowledge of the UI technology (HTML)
 			
 			viewModel = { rsp: data };
-			alert(data.master);
 			ko.applyBindings(viewModel);
 			$("#btnStart").click(function(d){
 				
