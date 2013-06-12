@@ -2,7 +2,7 @@ from socketIO_client import SocketIO
 import os
 import glob 
 
-filePattern = '*.py';
+filePattern = '../movies/*.mp4';
 
 def getMovieList():
 	mvs = glob.glob(filePattern);
