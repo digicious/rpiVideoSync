@@ -15,6 +15,7 @@ var payload = {'xxx': 'yyy'};
 var sys = require('sys')
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr) { sys.puts(stdout); };
+var fs = require('fs');
 
 console.log('Hello world');
 
@@ -74,14 +75,14 @@ app.get('/getRspList.json',function(req,res){
 
 app.post('/start', function(req,res){
 	
-		 console.log("--->"+ JSON.parse(req.body.jdata));
+		console.log("--->"+ JSON.parse(req.body.jdata));
 	    io.sockets.clients().forEach(function (socket) 
 		 {
 				socket.emit('start', JSON.parse(req.body.jdata).slaves.filter(function(o){ return o.socketId == socket.id ;}));
 		 });
 		
 		
-		//exec("nohup ./omxplayer-sync -v -m -x 255.255.255.255 ../movie.mp4.mp4 > /dev/null &", puts);		
+		exec("echo nohup ../omxplayer-sync -v -m -x 255.255.255.255 ../"+ req.body.jdata.master.selectedMovie + "  > /dev/null &", puts);		
 		
 		
 	});
@@ -100,6 +101,6 @@ app.get('/halt', function(req,res){
 	
 function getMovieList()
 {
-	var mvList = ["mv1", "mv2"];
+	var mvList = fs.readdirSync('../movies');
 	return mvList;
 }
