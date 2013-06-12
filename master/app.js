@@ -66,7 +66,7 @@ app.get('/getRspList.json',function(req,res){
 		{"rsp" : { id: "master", movies:["movie.mp4","movieOld.mp4"] }}, 
 		{"rsp" : { id: "192.168.1.2", movies:["movie1.mp4","movie2.mp4"] }}, 
 		{"rsp": { id: "192.168.1.3", movies:["movie54.mp4","movie6.mp4"] }} ];*/
-	var response = {master : { id: "master", movieList:  getMovieList(), selectMovie: "" }, slaves : rspArray };	
+	var response = { master : { id: "master", movieList:  getMovieList(), selectMovie: "" }, slaves : rspArray };	
     res.write(
      JSON.stringify( response ));
   res.end();

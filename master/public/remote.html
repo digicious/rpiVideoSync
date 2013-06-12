@@ -18,7 +18,7 @@
       </form>
 	  <div class="remote">
 	    <h2 class="remote-heading">Master</h2>
-		<select data-bind="options: master.movieList, value: master.selectedMovie"></select>
+		<select data-bind="options: rsp.master.movieList, value: rsp.master.selectedMovie"></select>
 	</div>
 	<div class="remote">	
 		<h2 class="remote-heading">Slave(s)</h2>
@@ -44,7 +44,7 @@
 		      // The view model is an abstract description of the state of the UI, but without any knowledge of the UI technology (HTML)
 			
 			viewModel = { rsp: data };
-			
+			alert(data.master);
 			ko.applyBindings(viewModel);
 			$("#btnStart").click(function(d){
 				
