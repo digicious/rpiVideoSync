@@ -12,20 +12,16 @@ app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var payload = {'xxx': 'yyy'};
-
 var sys = require('sys')
 var exec = require('child_process').exec;
 function puts(error, stdout, stderr) { sys.puts(stdout); };
 
 console.log('Hello world');
 
-
-
 //Routes
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/remote.html');
 });
-
 
 
 
@@ -70,8 +66,9 @@ app.get('/getRspList.json',function(req,res){
 		{"rsp" : { id: "master", movies:["movie.mp4","movieOld.mp4"] }}, 
 		{"rsp" : { id: "192.168.1.2", movies:["movie1.mp4","movie2.mp4"] }}, 
 		{"rsp": { id: "192.168.1.3", movies:["movie54.mp4","movie6.mp4"] }} ];*/
+	var response = {master : { id: "master", movieList:  getMovieList(), selectMovie: "" }, slaves : rspArray };	
     res.write(
-     JSON.stringify( rspArray ));
+     JSON.stringify( response ));
   res.end();
 });
 
@@ -80,7 +77,7 @@ app.post('/start', function(req,res){
 		 console.log("--->"+ JSON.parse(req.body.jdata));
 	    io.sockets.clients().forEach(function (socket) 
 		 {
-					socket.emit('start', JSON.parse(req.body.jdata).filter(function(o){ return o.socketId == socket.id ;}));
+				socket.emit('start', JSON.parse(req.body.jdata).slave.filter(function(o){ return o.socketId == socket.id ;}));
 		 });
 		
 		
@@ -100,3 +97,9 @@ app.get('/halt', function(req,res){
 		console.log('halt');
 		//exec("sudo halt",puts);
 	});
+	
+function getMovieList()
+{
+	var mvList = ["mv1", "mv2"];
+	return mvList;
+}

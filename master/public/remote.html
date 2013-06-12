@@ -17,18 +17,24 @@
         <button class="btn btn-large btn-block btn-primary" type="button">Shutdown</button>
       </form>
 	  <div class="remote">
-	  	 <ul data-bind="foreach: rsp">
-        <li>
-            <div>
-				 Raspberry id :
-                 <span data-bind="text: id"> </span>
-                 (<span data-bind="text: pid"></span>)
-            </div>
-			<select data-bind="options: movieList, value: selectedMovie"></select>
-        </li>
+	    <h2 class="remote-heading">Master</h2>
+		<select data-bind="options: master.movieList, value: master.selectedMovie"></select>
+	</div>
+	<div class="remote">	
+		<h2 class="remote-heading">Slave(s)</h2>
+		<ul data-bind="foreach: rsp.slaves">
+			 <li>
+				<div>
+					 Raspberry id :
+					 <span data-bind="text: id"> </span>
+					 (<span data-bind="text: pid"></span>)
+				</div>
+				<select data-bind="options: movieList, value: selectedMovie"></select>
+			</li>
 		</ul>
 	  </div>
     </div> 
+	
 	<script src="js/jquery-2.0.1.min.js"></script>
 	<script type='text/javascript' src='js/knockout-2.2.1.js'></script>
 	<script src="js/bootstrap.min.js"></script>
