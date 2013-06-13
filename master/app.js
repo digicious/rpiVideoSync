@@ -67,7 +67,7 @@ app.get('/getRspList.json',function(req,res){
 		{"rsp" : { id: "master", movies:["movie.mp4","movieOld.mp4"] }}, 
 		{"rsp" : { id: "192.168.1.2", movies:["movie1.mp4","movie2.mp4"] }}, 
 		{"rsp": { id: "192.168.1.3", movies:["movie54.mp4","movie6.mp4"] }} ];*/
-	var response = { master : { id: "master", movieList:  getMovieList(), selectMovie: "" }, slaves : rspArray };	
+	var response = { master : { id: "master", movieList:  getMovieList(), selectedMovie: "" }, slaves : rspArray };	
     res.write(
      JSON.stringify( response ));
   res.end();
@@ -82,17 +82,21 @@ app.post('/start', function(req,res){
 		 });
 		
 		
-		exec("nohup /home/pi/rpiVideoSync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+  req.body.jdata.master.selectedMovie + "  > /dev/null &", puts);		
+		exec("/home/pi/rpiVideoSync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+   JSON.parse(req.body.jdata).master.selectedMovie , puts);		
 		
 		
 	});
 app.get('/stop', function(req,res){
+	console.log('stop');
+	exec("/home/pi/rpiVideoSync/scripts/killOmx.sh");
 	io.sockets.clients().forEach(function (socket) 
 	 {
 		socket.emit('stop');
 	 });
-	console.log('stop'+ stop);
+	
 });
+
+
 app.get('/halt', function(req,res){
 		io.sockets.emit('halt');
 		console.log('halt');
