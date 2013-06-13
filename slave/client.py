@@ -48,7 +48,7 @@ def on_MovieStart(*args):
 	try:
 		global lastProcess;
 		print("Let's play : " + args[0][0]["selectedMovie"]);
-		lastProcess = subprocess.Popen( home + "omxplayer-sync -v -l " + args[0][0]["selectedMovie"], shell=True).pid;
+		lastProcess = subprocess.Popen( home + "omxplayer-sync -m -x 255.255.255.255  " + args[0][0]["selectedMovie"], shell=True).pid;
 	except:
 		print("error on_getMovieList");
 	
