@@ -64,6 +64,21 @@
 	
 	
 			});
+			
+			$("#btnShutdown").click(function(d){
+				//alert(JSON.stringify(viewModel.rsp));
+				 if(confirm("Do you want to shutdown ?"))
+				 {
+				 
+					$.ajax("/stop", {
+						type: 'GET'					
+					});
+				}
+	
+	
+			});
+			
+			
 		});
  
 	
