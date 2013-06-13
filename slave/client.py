@@ -56,7 +56,9 @@ def on_MovieStart(*args):
 def on_Stop(*args):	
 	try:
 	#this script will kill everything...
+		print("killing everything");
 		subprocess.Popen(home + "scripts/killOmx.sh", shell=True)
+		print("kill done !");
 	except:
 		print("error on_getMovieList");
 		 
