@@ -7,7 +7,8 @@ import platform
 import time
 import pexpect 
 
-filePattern = '../movies/*.mp4';
+home = '/home/pi/rpiVideoSync/'
+filePattern = home +'movies/*.mp4';
 waitInSeconds = 5;
 maxRetry = 10;
 masterIp = '192.168.2.166' ;
@@ -47,7 +48,7 @@ def on_MovieStart(*args):
 	try:
 		global lastProcess;
 		print("Let's play : " + args[0][0]["selectedMovie"]);
-		lastProcess = subprocess.Popen("../omxplayer-sync -v -l " + args[0][0]["selectedMovie"], shell=True).pid;
+		lastProcess = subprocess.Popen( home + "omxplayer-sync -v -l " + args[0][0]["selectedMovie"], shell=True).pid;
 	except:
 		print("error on_getMovieList");
 	
@@ -55,7 +56,7 @@ def on_MovieStart(*args):
 def on_Stop(*args):	
 	try:
 	#this script will kill everything...
-		subprocess.Popen("sh ../scripts/killOmx.sh", shell=True)
+		subprocess.Popen(home + "scripts/killOmx.sh", shell=True)
 	except:
 		print("error on_getMovieList");
 		 
