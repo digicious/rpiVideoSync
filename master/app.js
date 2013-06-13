@@ -82,7 +82,7 @@ app.post('/start', function(req,res){
 		 });
 		
 		
-		exec("echo nohup ../omxplayer-sync -v -m -x 255.255.255.255 ../"+ req.body.jdata.master.selectedMovie + "  > /dev/null &", puts);		
+		exec("nohup /home/pi/rpiVideoSync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+  req.body.jdata.master.selectedMovie + "  > /dev/null &", puts);		
 		
 		
 	});
@@ -91,7 +91,7 @@ app.get('/stop', function(req,res){
 	 {
 		socket.emit('stop');
 	 });
-	console.log('start'+ stop);
+	console.log('stop'+ stop);
 });
 app.get('/halt', function(req,res){
 		io.sockets.emit('halt');
