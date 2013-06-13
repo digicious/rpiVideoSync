@@ -101,6 +101,6 @@ app.get('/halt', function(req,res){
 	
 function getMovieList()
 {
-	var mvList = fs.readdirSync('../movies');
+	var mvList = fs.readdirSync('/home/pi/rpiVideoSync/movies');
 	return mvList;
 }
