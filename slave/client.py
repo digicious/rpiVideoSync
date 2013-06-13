@@ -62,6 +62,17 @@ def on_Stop(*args):
 	except:
 		print("error on_getMovieList");
 		 
+
+def on_Halt(*args):	
+	try:
+	#this script will kill everything...
+		print("killing everything");
+		subprocess.Popen("/usr/bin/sudo /sbin/halt", shell=True)
+		print("kill done !");
+	except:
+		print("error on_getMovieList");
+		
+		
 socketIO = None ;	
 while(nbRetry < maxRetry):
 	try:
@@ -70,6 +81,7 @@ while(nbRetry < maxRetry):
 		socketIO.on('getMovieList',on_getMovieList);
 		socketIO.on('start', on_MovieStart);
 		socketIO.on('stop', on_Stop);
+		socketIO.on('halt', on_Halt);
 		socketIO.emit('newPiConnected')
 		socketIO.wait()
 	except:

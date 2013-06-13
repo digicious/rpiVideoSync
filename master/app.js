@@ -100,7 +100,7 @@ app.get('/stop', function(req,res){
 app.get('/halt', function(req,res){
 		io.sockets.emit('halt');
 		console.log('halt');
-		//exec("sudo halt",puts);
+		exec("sudo halt",puts);
 	});
 	
 function getMovieList()
