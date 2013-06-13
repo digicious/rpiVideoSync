@@ -5,6 +5,7 @@ import  subprocess
 import json
 import platform
 import time
+import pexpect 
 
 filePattern = '../movies/*.mp4';
 waitInSeconds = 5;
@@ -54,7 +55,7 @@ def on_MovieStart(*args):
 def on_Stop(*args):	
 	try:
 	#this script will kill everything...
-		subprocess.Popen("sh ../scripts/killomx.sh", shell=True)
+		subprocess.Popen("sh ../scripts/killOmx.sh", shell=True)
 	except:
 		print("error on_getMovieList");
 		 
