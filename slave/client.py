@@ -11,7 +11,7 @@ home = '/home/pi/rpiVideoSync/'
 filePattern = home +'movies/*.mp4';
 waitInSeconds = 5;
 maxRetry = 10;
-masterIp = '192.168.2.166' ;
+masterIp = '10.0.4.253' ;
 
 
 
@@ -48,7 +48,8 @@ def on_MovieStart(*args):
 	try:
 		global lastProcess;
 		print("Let's play : " + args[0][0]["selectedMovie"]);
-		lastProcess = subprocess.Popen( home + "omxplayer-sync -m -x 255.255.255.255  " + args[0][0]["selectedMovie"], shell=True).pid;
+#		time.sleep(2)
+		lastProcess = subprocess.Popen( home + "omxplayer-sync -l --loop " + args[0][0]["selectedMovie"], shell=True).pid;
 	except:
 		print("error on_getMovieList");
 	
