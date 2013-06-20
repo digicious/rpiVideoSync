@@ -82,7 +82,7 @@ app.post('/start', function(req,res){
 		 });
 		
 		
-		exec("/home/pi/rpiVideoSync/omxplayer-sync -m -l -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+   JSON.parse(req.body.jdata).master.selectedMovie , puts);		
+		exec("/home/pi/rpiVideoSync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+   JSON.parse(req.body.jdata).master.selectedMovie , puts);		
 		
 		
 	});
