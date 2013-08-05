@@ -1,10 +1,22 @@
+
+//-------------------------------------------
+var omxPlayerCommand ="/home/pi/omxplayer-sync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"
+var killOmxCommand =  "/home/pi/rpiVideoSync/scripts/killOmx.sh";
+var moviesLocation = '/home/pi/rpiVideoSync/movies';
+var haltCommand = "/usr/bin/sudo /sbin/halt";
+var networkPort = 8081;
+
+//-----------------------------------------------
+
+
+
 var express = require('express')
   , app = express()  
   , server = require('http').createServer(app)
   , path = require('path')
 
 // all environments
-app.set('port', process.env.TEST_PORT || 8081);
+app.set('port', process.env.TEST_PORT || networkPort);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
@@ -23,6 +35,8 @@ console.log('Hello world');
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/remote.html');
 });
+
+
 
 
 
@@ -63,10 +77,6 @@ io.sockets.on('connection', function (socket) {
 
 app.get('/getRspList.json',function(req,res){
 	res.writeHead(200, {"Content-Type": "application/json"});
-	/*var rspArray = [ 
-		{"rsp" : { id: "master", movies:["movie.mp4","movieOld.mp4"] }}, 
-		{"rsp" : { id: "192.168.1.2", movies:["movie1.mp4","movie2.mp4"] }}, 
-		{"rsp": { id: "192.168.1.3", movies:["movie54.mp4","movie6.mp4"] }} ];*/
 	var response = { master : { id: "master", movieList:  getMovieList(), selectedMovie: "" }, slaves : rspArray };	
     res.write(
      JSON.stringify( response ));
@@ -76,19 +86,22 @@ app.get('/getRspList.json',function(req,res){
 app.post('/start', function(req,res){
 	
 		console.log("--->"+ JSON.parse(req.body.jdata));
-	    io.sockets.clients().forEach(function (socket) 
+	        io.sockets.clients().forEach(function (socket) 
 		 {
 				socket.emit('start', JSON.parse(req.body.jdata).slaves.filter(function(o){ return o.socketId == socket.id ;}));
 		 });
 		
-		
-		exec("/home/pi/rpiVideoSync/omxplayer-sync -m -x 255.255.255.255 /home/pi/rpiVideoSync/movies/"+   JSON.parse(req.body.jdata).master.selectedMovie , puts);		
-		
+		var command = omxPlayerCommand + JSON.parse(req.body.jdata).master.selectedMovie;	
+
+		console.log(req.connection.remoteAddress);
+		console.log(command);
+		exec(command,puts);
 		
 	});
+
 app.get('/stop', function(req,res){
 	console.log('stop');
-	exec("/home/pi/rpiVideoSync/scripts/killOmx.sh");
+	exec(killOmxCommand);
 	io.sockets.clients().forEach(function (socket) 
 	 {
 		socket.emit('stop');
@@ -100,11 +113,11 @@ app.get('/stop', function(req,res){
 app.get('/halt', function(req,res){
 		io.sockets.emit('halt');
 		console.log('halt');
-		exec("/usr/bin/sudo /sbin/halt",puts);
+		exec(haltCommand,puts);
 	});
 	
 function getMovieList()
 {
-	var mvList = fs.readdirSync('/home/pi/rpiVideoSync/movies');
+	var mvList = fs.readdirSync(moviesLocation);
 	return mvList;
 }
