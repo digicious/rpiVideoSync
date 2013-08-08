@@ -11,8 +11,9 @@ home = '/home/pi/rpiVideoSync/'
 filePattern = home +'movies/*.mp4';
 waitInSeconds = 5;
 maxRetry = 10;
-masterIp = '10.0.4.253' ;
-
+#masterIp = '192.168.1.177' ;
+masterIp = '127.0.0.1' ;
+socketPortNumber = 8082;
 
 
 def getMovieList():
@@ -77,7 +78,7 @@ def on_Halt(*args):
 socketIO = None ;	
 while(nbRetry < maxRetry):
 	try:
-		socketIO = SocketIO(masterIp, 8082)
+		socketIO = SocketIO(masterIp, socketPortNumber)
 		socketIO.on('newPiConnected', on_newPiConnected_response)
 		socketIO.on('getMovieList',on_getMovieList);
 		socketIO.on('start', on_MovieStart);
